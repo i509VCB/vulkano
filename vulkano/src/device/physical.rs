@@ -926,3 +926,40 @@ impl From<ash::vk::ShaderCorePropertiesFlagsAMD> for ShaderCoreProperties {
         Self {}
     }
 }
+
+pub struct PhysicalDeviceDrmProperties(ash::vk::PhysicalDeviceDrmPropertiesEXT);
+
+impl PhysicalDeviceDrmProperties {
+    /// Returns the major and minor numbers of the device's primary DRM node or None if the device
+    /// does not have a primary node.
+    ///
+    /// A device may not have a primary node if the device does not have a display subsystem.
+    #[inline]
+    pub fn primary(&self) -> Option<(i64, i64)> {
+        if self.0.has_primary == ash::vk::TRUE {
+            Some((self.0.primary_major, self.0.primary_minor))
+        } else {
+            None
+        }
+    }
+
+    /// Returns the major and minor numbers of the device's render DRM node or None if the device
+    /// does not have a render node.
+    ///
+    /// A device may not have a render node if the device is a software rendering engine without a
+    /// display subsystem.
+    #[inline]
+    pub fn render(&self) -> Option<(i64, i64)> {
+        if self.0.has_render == ash::vk::TRUE {
+            Some((self.0.render_major, self.0.render_minor))
+        } else {
+            None
+        }
+    }
+}
+
+impl From<ash::vk::PhysicalDeviceDrmPropertiesEXT> for PhysicalDeviceDrmProperties {
+    fn from(val: ash::vk::PhysicalDeviceDrmPropertiesEXT) -> Self {
+        PhysicalDeviceDrmProperties(val)
+    }
+}

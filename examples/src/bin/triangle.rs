@@ -72,6 +72,7 @@ fn main() {
     // `khr_swapchain` extension.
     let device_extensions = DeviceExtensions {
         khr_swapchain: true,
+        ext_physical_device_drm: true,
         ..DeviceExtensions::none()
     };
 

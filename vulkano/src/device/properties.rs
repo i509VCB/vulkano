@@ -1,6 +1,6 @@
 use crate::device::physical::{
-    ConformanceVersion, DriverId, PhysicalDeviceType, PointClippingBehavior, ShaderCoreProperties,
-    ShaderFloatControlsIndependence, SubgroupFeatures,
+    ConformanceVersion, DriverId, PhysicalDeviceDrmProperties, PhysicalDeviceType,
+    PointClippingBehavior, ShaderCoreProperties, ShaderFloatControlsIndependence, SubgroupFeatures,
 };
 use crate::image::{SampleCount, SampleCounts};
 use crate::pipeline::shader::ShaderStages;
@@ -162,6 +162,13 @@ impl FromVulkan<i32> for i32 {
     }
 }
 
+impl FromVulkan<i64> for i64 {
+    #[inline]
+    fn from_vulkan(val: i64) -> Option<Self> {
+        Some(val)
+    }
+}
+
 impl FromVulkan<f32> for f32 {
     #[inline]
     fn from_vulkan(val: f32) -> Option<Self> {
@@ -277,6 +284,12 @@ impl FromVulkan<ash::vk::ShaderStageFlags> for ShaderStages {
 impl FromVulkan<ash::vk::SubgroupFeatureFlags> for SubgroupFeatures {
     #[inline]
     fn from_vulkan(val: ash::vk::SubgroupFeatureFlags) -> Option<Self> {
+        Some(val.into())
+    }
+}
+
+impl FromVulkan<ash::vk::PhysicalDeviceDrmPropertiesEXT> for PhysicalDeviceDrmProperties {
+    fn from_vulkan(val: ash::vk::PhysicalDeviceDrmPropertiesEXT) -> Option<Self> {
         Some(val.into())
     }
 }
